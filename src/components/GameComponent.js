@@ -14,7 +14,7 @@ class GameComponent extends Component {
         this.getHelp = this.getHelp.bind(this)
         this.calculateWinner = this.calculateWinner.bind(this)
         this.resetGame = this.resetGame.bind(this)
-        this.alertThankYou = this.alertThankYou.bind(this)
+        this.openGithub = this.openGithub.bind(this)
         this.state = {
             lockIn: true,
             generate: true,
@@ -28,13 +28,12 @@ class GameComponent extends Component {
         this.inititalState = this.state;
         
     }
-
     generateNumber() {
         const min = 0;
         const max = 99;
         const rand = Math.floor(Math.random() * (max - min + 1)) + min;
         if (rand === 0) {
-            this.setStategenerateNumber();
+            this.generateNumber();
         }
         this.setState({
             number: this.state.number + rand,
@@ -46,41 +45,43 @@ class GameComponent extends Component {
         });
     }
     playersHaveEntered() {
-        if ((document.getElementById('player2Input').value > 100 || document.getElementById('player2Input').value < 0) && (document.getElementById('player1Input').value > 100 || document.getElementById('player1Input').value < 0)) {
+        var player1Input = (document.getElementById('player1Input').value);
+        var player2Input = (document.getElementById('player2Input').value);
+        if ((player2Input || player2Input < 0) && (player1Input > 100 || player1Input < 0)) {
             this.setState({
                 isGenerate: "Please enter a number within 0 and 100 player 1 and player 2"
             });
-        } else if ((document.getElementById('player2Input').value > 100 || document.getElementById('player2Input').value < 0) && (document.getElementById('player1Input').value - 0 === 0)) {
+        } else if ((player2Input > 100 || player2Input < 0) && (player1Input - 0 === 0)) {
             this.setState({
                 isGenerated: "Please enter a number within 0 and 100 player 1 and player 2."
             });
             return;
-        } else if ((document.getElementById('player1Input').value > 100 || document.getElementById('player1Input').value < 0) && (document.getElementById('player2Input').value - 0 === 0)) {
+        } else if ((player1Input > 100 || player1Input < 0) && (player2Input - 0 === 0)) {
             this.setState({
                 isGenerated: "Please enter a number within 0 and 100 player 1 and player 2."
             });
             return;
-        } else if (document.getElementById('player2Input').value > 100 || document.getElementById('player2Input').value < 0) {
+        } else if (player2Input > 100 || player2Input < 0) {
             this.setState({
                 isGenerated: "Please enter a number within 0 and 100 player 2."
             });
             return;
-        } else if (document.getElementById('player1Input').value > 100 || document.getElementById('player1Input').value < 0) {
+        } else if (player1Input > 100 || player1Input < 0) {
             this.setState({
                 isGenerated: "Please enter a number within 0 and 100 player 1."
             });
             return;
-        } else if (document.getElementById('player2Input').value - 0 === 0 && document.getElementById('player1Input').value - 0 === 0) {
+        } else if (player2Input - 0 === 0 && player1Input - 0 === 0) {
             this.setState({
                 isGenerated: "Please enter a number within 0 and 100 player 1 and player 2."
             });
             return;
-        }  else if (document.getElementById('player2Input').value - 0 === 0) {
+        }  else if (player2Input - 0 === 0) {
             this.setState({
                 isGenerated: "Please enter a number within 0 and 100 player 2."
             });
             return;
-        } else if (document.getElementById('player1Input').value - 0 === 0) {
+        } else if (player1Input - 0 === 0) {
             this.setState({
                 isGenerated: "Please enter a number within 0 and 100 player 1."
             });
@@ -105,8 +106,8 @@ class GameComponent extends Component {
         this.setState(this.inititalState);
     }
 
-    alertThankYou() {
-        alert("Thank you for playing.");
+    openGithub() {
+        window.open("https://github.com/Tivamishae");
     }
 
     render() {
@@ -121,7 +122,7 @@ class GameComponent extends Component {
                 : null}
 
                 {!this.state.howToPlay_madeByHugo ?
-                <Button titleprop="This was made by Hugo Duran" onclickprop={this.alertThankYou}></Button>
+                <Button titleprop="This was made by Hugo Duran" onclickprop={this.openGithub}></Button>
                 : null}
 
                 <p className="hiddenParagraph">Taking up space ---------------------------------------------------------------------------------------------------------------------------------------</p>
