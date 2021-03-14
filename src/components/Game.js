@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import GameComponent from './GameComponent';
+import '../component_css/Button.css';
+import Button from './Button';
 
 class Game extends Component {
 constructor (props) {
@@ -16,8 +18,12 @@ constructor (props) {
   render () {
     return (
       <div className="App">
-        <button onClick={this.startGame} disabled={this.state.mount}>Start Game</button>
-        <button onClick={this.endGame} disabled={!this.state.mount}>End Game</button>
+        {!this.state.mount ?
+        <Button onclickprop={this.startGame} titleprop="Start Game"></Button>
+        : null}
+        {this.state.mount ?
+        <Button onclickprop={this.endGame} titleprop="End Game"></Button>
+        : null}
         {this.state.mount ? <GameComponent/> : null}
       </div>
     );

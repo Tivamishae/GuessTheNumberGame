@@ -1,0 +1,9 @@
+.hiddenParagraph {
+    opacity: 0;
+}
+
+.generateParagraph {
+    color: white;
+    font-size: large;
+    text-align: center;
+}

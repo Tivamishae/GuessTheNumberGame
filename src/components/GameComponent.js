@@ -1,82 +1,103 @@
 import React, { Component } from "react";
+import '../component_css/Paragraphs.css';
+import '../component_css/Input.css';
+import Button from './Button.js';
+import Input from './Input.js';
+
 
 class GameComponent extends Component {
     constructor(props) {
         super(props);
 
-        this.handleClick = this.handleClick.bind(this);
-        this.player1Entered = this.player1Entered.bind(this)
-        this.player2Entered = this.player2Entered.bind(this)
+        this.generateNumber = this.generateNumber.bind(this);
+        this.playersHaveEntered = this.playersHaveEntered.bind(this)
         this.getHelp = this.getHelp.bind(this)
         this.calculateWinner = this.calculateWinner.bind(this)
         this.resetGame = this.resetGame.bind(this)
+        this.alertThankYou = this.alertThankYou.bind(this)
         this.state = {
+            lockIn: true,
+            generate: true,
             number: 0,
-            mount: true,
             player1: true,
             player2: true,
-            helperColor: '#FFFFFF',
             isGenerated: "Generate a number.",
-            player1Checker: false,
-            player2Checker: false,
-            i: 0
+            howToPlay_madeByHugo: true,
+            helperParagraph: false
         };
         this.inititalState = this.state;
         
     }
 
-    handleClick() {
+    generateNumber() {
         const min = 0;
         const max = 99;
         const rand = Math.floor(Math.random() * (max - min + 1)) + min;
+        if (rand === 0) {
+            this.setStategenerateNumber();
+        }
         this.setState({
             number: this.state.number + rand,
-            mount: !this.state.mount,
             player1: !this.state.player1,
             player2: !this.state.player2,
             isGenerated: "A number has been generated. Now guess it.",
-            player1Checker: !this.state.player1,
-            player2Checker: !this.state.player1
+            generate: !this.state.generate,
+            lockIn: !this.state.lockIn
         });
     }
-
-    player1Entered() {
-        if (document.getElementById('player1Input').value > 100) {
+    playersHaveEntered() {
+        if ((document.getElementById('player2Input').value > 100 || document.getElementById('player2Input').value < 0) && (document.getElementById('player1Input').value > 100 || document.getElementById('player1Input').value < 0)) {
             this.setState({
-                isGenerated: "Please enter a number within 0 and 100 player 1."
+                isGenerate: "Please enter a number within 0 and 100 player 1 and player 2"
+            });
+        } else if ((document.getElementById('player2Input').value > 100 || document.getElementById('player2Input').value < 0) && (document.getElementById('player1Input').value - 0 === 0)) {
+            this.setState({
+                isGenerated: "Please enter a number within 0 and 100 player 1 and player 2."
             });
             return;
-        } else if (document.getElementById('player1Input').value < 0){
+        } else if ((document.getElementById('player1Input').value > 100 || document.getElementById('player1Input').value < 0) && (document.getElementById('player2Input').value - 0 === 0)) {
+            this.setState({
+                isGenerated: "Please enter a number within 0 and 100 player 1 and player 2."
+            });
             return;
-        }
-        this.setState({
-            player1: !this.state.player1,
-            player1Checker: !this.state.player1Checker
-        }, () => {
-            this.calculateWinner();
-        });
-    }
-
-    player2Entered() {
-        if (document.getElementById('player2Input').value > 100) {
+        } else if (document.getElementById('player2Input').value > 100 || document.getElementById('player2Input').value < 0) {
             this.setState({
                 isGenerated: "Please enter a number within 0 and 100 player 2."
             });
             return;
-        } else if (document.getElementById('player2Input').value < 0){
+        } else if (document.getElementById('player1Input').value > 100 || document.getElementById('player1Input').value < 0) {
+            this.setState({
+                isGenerated: "Please enter a number within 0 and 100 player 1."
+            });
             return;
-        }
-        this.setState({
-            player2: !this.state.player2,
-            player2Checker: !this.state.player2Checker
-        }, () => {
+        } else if (document.getElementById('player2Input').value - 0 === 0 && document.getElementById('player1Input').value - 0 === 0) {
+            this.setState({
+                isGenerated: "Please enter a number within 0 and 100 player 1 and player 2."
+            });
+            return;
+        }  else if (document.getElementById('player2Input').value - 0 === 0) {
+            this.setState({
+                isGenerated: "Please enter a number within 0 and 100 player 2."
+            });
+            return;
+        } else if (document.getElementById('player1Input').value - 0 === 0) {
+            this.setState({
+                isGenerated: "Please enter a number within 0 and 100 player 1."
+            });
+            return;
+        } else {
+            this.setState({
+                lockIn: !this.state.lockIn,
+                howToPlay_madeByHugo: false,
+                helperParagraph: false
+            });
             this.calculateWinner();
-        });
+        }
     }
     
     getHelp() {
         this.setState({
-            helperColor: '#000000'
+            helperParagraph: !this.state.helperParagraph
         })
     }
 
@@ -84,33 +105,56 @@ class GameComponent extends Component {
         this.setState(this.inititalState);
     }
 
+    alertThankYou() {
+        alert("Thank you for playing.");
+    }
+
     render() {
         return (
             <div>
+                {this.state.helperParagraph ?
                 <p id="helperParagraph" style={{ color: this.state.helperColor }}>Firstly, generate a number. Then both player guesses which number has been generated. The player who comes the closest wins. (The number generated is always between 0 and 100.</p>
-                <button onClick={this.getHelp}>How to play</button>
-                <p style={{ color: 'white' }}>Taking up space</p>
+                : null}
 
-                <p>Player 1</p>
-                <input type="number" id="player1Input" placeholder="Enter a number" disabled={this.state.player1}></input>
-                <button onClick={this.player1Entered} disabled={this.state.player1}>Enter</button>
+                {this.state.howToPlay_madeByHugo ?
+                <Button titleprop="How to play" onclickprop={this.getHelp}></Button>
+                : null}
 
-                <p>Player 2</p>
-                <input type="number" id="player2Input" placeholder="Enter a number"disabled={this.state.player2}></input>
-                <button onClick={this.player2Entered} disabled={this.state.player2}>Enter</button>
+                {!this.state.howToPlay_madeByHugo ?
+                <Button titleprop="This was made by Hugo Duran" onclickprop={this.alertThankYou}></Button>
+                : null}
 
-                <p style={{ color: 'white' }}>Taking up space</p>
+                <p className="hiddenParagraph">Taking up space ---------------------------------------------------------------------------------------------------------------------------------------</p>
 
-                <button onClick={this.handleClick}
-                disabled={!this.state.mount}
-                >Generate Number</button>
+                {!this.state.player1 ?
+                <Input idprop="player1Input" titleprop="Player1"></Input>
+                : null}
 
-                <p style={{ color: 'white' }}>Taking up space</p>
-                <p style={{ color: 'white' }}>Taking up space</p>
-                <p>{this.state.isGenerated}</p>
-                <p style={{ color: 'white' }}>Taking up space</p>
-                <button onClick={this.resetGame}>Restart Game</button>
+                {!this.state.player2 ?
+                <Input idprop="player2Input" titleprop="Player2"></Input>
+                : null}
 
+                {!this.state.lockIn ? 
+                <Button titleprop="Lock in answers" onclickprop={this.playersHaveEntered}></Button>
+                : null}
+
+                <p className="hiddenParagraph">Taking up space</p>
+
+                
+                {this.state.generate ?
+                <Button titleprop="Generate Number" onclickprop={this.generateNumber}></Button>
+                : null}
+                
+                <p className="hiddenParagraph">Taking up space</p>
+                <p className="hiddenParagraph">Taking up space</p>
+
+                <div className="generateParagraph">
+                    <p>{this.state.isGenerated}</p>
+                </div>
+
+                <p className="hiddenParagraph">Taking up space</p>
+
+                <Button onclickprop={this.resetGame} titleprop="Restart game"></Button>
             </div>
 
         )
@@ -120,20 +164,27 @@ class GameComponent extends Component {
         var player2Input = (document.getElementById('player2Input').value);
         var player1EndingNumber = Math.pow((this.state.number - player1Input), 2);
         var player2EndingNumber = Math.pow((this.state.number - player2Input), 2);
-        if (this.state.player1Checker === this.state.player2Checker && this.state.player2Checker === true) {
-            if (player1EndingNumber < player2EndingNumber) {
+        if (player1EndingNumber < player2EndingNumber) {
+            this.setState({
+                isGenerated: "Player 1 won. The number was: " + this.state.number,
+                player1: true,
+                player2: true
+            });
+        } else if (player1EndingNumber === player2EndingNumber) {
                 this.setState({
-                    isGenerated: "Player 1 won. The number was: " + this.state.number
+                    isGenerated: "Both choose the same number, its a tie. The number was: " + this.state.number,
+                    player1: true,
+                    player2: true
                 });
-            } else {
-                this.setState({
-                    isGenerated: "Player 2 won. The number was: " + this.state.number
-                });
-            }
         } else {
-                return;
+            this.setState({
+                isGenerated: "Player 2 won. The number was: " + this.state.number,
+                player1: true,
+                player2: true
+            });
         }
     }
 }
+
 
 export default GameComponent;
