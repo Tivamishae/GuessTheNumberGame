@@ -51,12 +51,12 @@ class GameComponent extends Component {
             this.setState({
                 isGenerate: "Please enter a number within 0 and 100 player 1 and player 2"
             });
-        } else if ((player2Input > 100 || player2Input < 0) && (player1Input - 0 === 0)) {
+        } else if ((player2Input > 100 || player2Input < 0) && (player1Input.length === 0)) {
             this.setState({
                 isGenerated: "Please enter a number within 0 and 100 player 1 and player 2."
             });
             return;
-        } else if ((player1Input > 100 || player1Input < 0) && (player2Input - 0 === 0)) {
+        } else if ((player1Input > 100 || player1Input < 0) && (player2Input.length === 0)) {
             this.setState({
                 isGenerated: "Please enter a number within 0 and 100 player 1 and player 2."
             });
@@ -71,17 +71,17 @@ class GameComponent extends Component {
                 isGenerated: "Please enter a number within 0 and 100 player 1."
             });
             return;
-        } else if (player2Input - 0 === 0 && player1Input - 0 === 0) {
+        } else if (player2Input.length === 0 && player1Input.length === 0) {
             this.setState({
                 isGenerated: "Please enter a number within 0 and 100 player 1 and player 2."
             });
             return;
-        }  else if (player2Input - 0 === 0) {
+        }  else if (player2Input.length === 0) {
             this.setState({
                 isGenerated: "Please enter a number within 0 and 100 player 2."
             });
             return;
-        } else if (player1Input - 0 === 0) {
+        } else if (player1Input.length === 0) {
             this.setState({
                 isGenerated: "Please enter a number within 0 and 100 player 1."
             });
